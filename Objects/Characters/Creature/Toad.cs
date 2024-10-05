@@ -6,20 +6,20 @@ using System.Collections.Generic;
 namespace Game
 {
 
-    public class Toad : KinematicBody2D
+    public abstract class Toad : KinematicBody2D
     {
         [Signal]
         public delegate void Arrived(Toad toad);
         [Signal]
         public delegate void Died(Toad toad, Node killer);
 
+        public TileMap Map {get;set;}
+
 #region Exported Properties
         [Export]
         public float FollowingSpeed {get;set;} = 5f;
         [Export]
         public float FleeSpeed {get;set;} = 10f;
-        [Export]
-        public NodePath MapPath {get;set;}
 #endregion
         public enum State: int
         {
@@ -47,7 +47,6 @@ namespace Game
         }
 
         private bool _isReady = false;
-        private TileMap _map;
         protected State _currentStateRaw = State.IDLE;
         protected Node2D _currentFollower = null;
         protected Vector2 _currentDirection;
@@ -83,8 +82,6 @@ namespace Game
             _wanderingTimer = this.GetNode<Timer>("WanderingTimer");
             _bodyAnimations = this.GetNode<AnimatedSprite>("Body");
             _eyesAnimations = this.GetNode<AnimatedSprite>("Eyes");
-
-            _map = this.GetNode<TileMap>(MapPath);
 
             _isReady = true;
         }
@@ -187,33 +184,11 @@ namespace Game
             }
         }
 
-        protected virtual void _EntityEntered(Node entity)
-        {
-            if(entity is Player player && (_currentState == State.IDLE || _currentState == State.WANDERING))
-            {
-                _currentFollower = player;
-                _currentState = State.FOLLOWING;
+        protected abstract void _EntityEntered(Node entity);
 
-                if(OS.IsDebugBuild())
-                {
-                    GD.Print($"{this.Name} starts FOLLOWING {player.Name} !");
-                }
-            }
-        }
 
-        protected virtual void _EntityExited(Node entity)
-        {
-            if(_currentState == State.FOLLOWING && _currentFollower == entity)
-            {
-                if(OS.IsDebugBuild())
-                {
-                    GD.Print($"{this.Name} STOPS following  {_currentFollower.Name} !");
-                }
+        protected abstract void _EntityExited(Node entity);
 
-                _currentFollower = null;
-                _currentState = State.IDLE;
-            }
-        }
 #endregion
 #region Signals Hooks
         public void _on_Sensor_body_entered(Node body)
