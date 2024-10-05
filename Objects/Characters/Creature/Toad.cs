@@ -8,11 +8,18 @@ namespace Game
 
     public class Toad : KinematicBody2D
     {
+        [Signal]
+        public delegate void Arrived(Toad toad);
+        [Signal]
+        public delegate void Died(Toad toad, Node killer);
+
 #region Exported Properties
         [Export]
         public float FollowingSpeed {get;set;} = 5f;
         [Export]
         public float FleeSpeed {get;set;} = 10f;
+        [Export]
+        public NodePath MapPath {get;set;}
 #endregion
         public enum State: int
         {
@@ -20,25 +27,66 @@ namespace Game
             WANDERING,
             FLEEING,
             FOLLOWING,
-            
+            ARRIVED,
             DIED
         }
 
 #region Internal Properties
         protected Random _rand = new Random();
-        protected State _currentState = State.IDLE;
+        protected State _currentState
+        {
+            get => _currentStateRaw;
+            set
+            {
+                if(value != _currentStateRaw)
+                {
+                    _currentStateRaw = value;
+                    this._UpdateAnimations();
+                }
+            }
+        }
+
+        private bool _isReady = false;
+        private TileMap _map;
+        protected State _currentStateRaw = State.IDLE;
         protected Node2D _currentFollower = null;
         protected Vector2 _currentDirection;
         protected Timer _wanderingTimer;
+        protected AnimatedSprite _bodyAnimations;
+        protected AnimatedSprite _eyesAnimations;
         //protected IList<Node2D> _currentEnnemies {get; set;} = new List<Node2D>();
 
         #endregion
 
+        public void TriggerArrival(Pond pond)
+        {
+            if(_currentState != State.ARRIVED && _currentState != State.DIED)
+            {
+                if(OS.IsDebugBuild())
+                {
+                    GD.Print($"{this.Name} ARRIVED to pond !");
+                }
+
+                _currentDirection = (pond.GlobalPosition - this.GlobalPosition).Normalized();
+                this.LookAt(this.GlobalPosition + _currentDirection);
+                this.RotationDegrees += 90;
+
+                _currentState = State.ARRIVED;
+                this.GetTree().CreateTimer(1.5f).Connect("timeout", this, nameof(_on_ArrivedTimer_timeout));
+            }
+        }
+        
         public override void _Ready()
         {
             base._Ready();
 
             _wanderingTimer = this.GetNode<Timer>("WanderingTimer");
+            _bodyAnimations = this.GetNode<AnimatedSprite>("Body");
+            _eyesAnimations = this.GetNode<AnimatedSprite>("Eyes");
+
+            _map = this.GetNode<TileMap>(MapPath);
+
+            _isReady = true;
         }
 
         public override void _Process(float delta)
@@ -87,6 +135,7 @@ namespace Game
                 {
                     case State.FOLLOWING:
                     case State.WANDERING:
+                    case State.ARRIVED:
                         move *= FollowingSpeed;
                     break;
 
@@ -100,27 +149,44 @@ namespace Game
                 var lastCollision = this.GetLastSlideCollision();
                 if(lastCollision != null)
                 {
-                    if(_currentState == State.WANDERING)
+                    switch(_currentState)
                     {
-                        _wanderingTimer.Stop();
-                        _on_WanderingTimer_timeout();
+                        case State.WANDERING:
+                            _wanderingTimer.Stop();
+                            _on_WanderingTimer_timeout();
+                        break;
                     }
                 }
             }
         }
-        
-        public void _on_WanderingTimer_timeout()
+
+#region Internal methods
+
+        protected virtual void _UpdateAnimations()
         {
-            _currentDirection = Vector2.Zero;
-            _currentState = State.IDLE;
-            
-            if(OS.IsDebugBuild())
+            if(_isReady)
             {
-                GD.Print($"{this.Name} STOPS wandering !");
+                switch(_currentState)
+                {
+                    case State.IDLE:
+                        _bodyAnimations.Animation = "idle";
+                        _eyesAnimations.Animation = "opening";
+                    break;
+
+                    case State.FOLLOWING:
+                    case State.WANDERING:
+                        _bodyAnimations.Animation = "move";
+                        _eyesAnimations.Animation = "opening";
+                    break;
+
+                    case State.FLEEING:
+                        _bodyAnimations.Animation = "move";
+                        _eyesAnimations.Animation = "afraid";
+                    break;
+                }
             }
         }
 
-#region Internal methods
         protected virtual void _EntityEntered(Node entity)
         {
             if(entity is Player player && (_currentState == State.IDLE || _currentState == State.WANDERING))
@@ -168,6 +234,32 @@ namespace Game
         public void _on_Sensor_area_exited(Area2D area)
         {
             this._EntityExited(area);
+        }
+
+        public void _on_Body_animation_finished()
+        {
+            if(_currentState == State.ARRIVED && _bodyAnimations.Animation == "arrived")
+            {
+                EmitSignal(nameof(Arrived), this);
+                QueueFree();
+            }
+        }
+
+        public void _on_WanderingTimer_timeout()
+        {
+            _currentDirection = Vector2.Zero;
+            _currentState = State.IDLE;
+            
+            if(OS.IsDebugBuild())
+            {
+                GD.Print($"{this.Name} STOPS wandering !");
+            }
+        }
+
+        public void _on_ArrivedTimer_timeout()
+        {
+            _currentDirection = Vector2.Zero;
+            _bodyAnimations.Animation = "arrived";
         }
 #endregion
     }
