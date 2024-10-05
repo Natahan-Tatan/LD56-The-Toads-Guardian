@@ -30,6 +30,24 @@ position = Vector2( 158, 62 )
 [node name="Toad3" parent="Toads" instance=ExtResource( 2 )]
 position = Vector2( 110, 182 )
 
+[node name="Toad4" parent="Toads" instance=ExtResource( 2 )]
+position = Vector2( 231, 197 )
+
+[node name="Toad5" parent="Toads" instance=ExtResource( 2 )]
+position = Vector2( 152, 311 )
+
+[node name="Toad6" parent="Toads" instance=ExtResource( 2 )]
+position = Vector2( 59, 290 )
+
+[node name="Toad7" parent="Toads" instance=ExtResource( 2 )]
+position = Vector2( 181, 249 )
+
+[node name="Toad8" parent="Toads" instance=ExtResource( 2 )]
+position = Vector2( 117, 259 )
+
+[node name="Toad9" parent="Toads" instance=ExtResource( 2 )]
+position = Vector2( 296, 311 )
+
 [node name="MapLimits" type="StaticBody2D" parent="."]
 
 [node name="Top" type="CollisionShape2D" parent="MapLimits"]

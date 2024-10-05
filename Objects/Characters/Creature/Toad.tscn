@@ -1,6 +1,7 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://Objects/Characters/Creature/creature_purple.png" type="Texture" id=1]
+[ext_resource path="res://Objects/Characters/Creature/Toad.cs" type="Script" id=2]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 1 )
@@ -111,9 +112,10 @@ animations = [ {
 radius = 7.0
 
 [sub_resource type="CircleShape2D" id=23]
-radius = 9.0
+radius = 99.0
 
 [node name="Toad" type="KinematicBody2D"]
+script = ExtResource( 2 )
 
 [node name="Body" type="AnimatedSprite" parent="."]
 frames = SubResource( 4 )
@@ -128,8 +130,18 @@ playing = true
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 22 )
 
-[node name="Detector" type="Area2D" parent="."]
+[node name="Sensor" type="Area2D" parent="."]
+visible = false
 modulate = Color( 1, 0, 0, 1 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Detector"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sensor"]
 shape = SubResource( 23 )
+
+[node name="WanderingTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="area_entered" from="Sensor" to="." method="_on_Sensor_area_entered"]
+[connection signal="area_exited" from="Sensor" to="." method="_on_Sensor_area_exited"]
+[connection signal="body_entered" from="Sensor" to="." method="_on_Sensor_body_entered"]
+[connection signal="body_exited" from="Sensor" to="." method="_on_Sensor_body_exited"]
+[connection signal="timeout" from="WanderingTimer" to="." method="_on_WanderingTimer_timeout"]
