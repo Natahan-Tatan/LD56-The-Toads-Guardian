@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Objects/Map/Map.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Objects/Characters/Creature/Toad.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Objects/Characters/Player/Player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Objects/Pond/Pond.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Objects/Egg/Egg.tscn" type="PackedScene" id=5]
 
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 329, 6.5 )
@@ -44,6 +45,14 @@ MapPath = NodePath("../../Map")
 [node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 504, 211 )
 Speed = 10.0
+
+[node name="Eggs" type="Node2D" parent="."]
+
+[node name="Egg" parent="Eggs" instance=ExtResource( 5 )]
+position = Vector2( 593, 34 )
+
+[node name="Egg2" parent="Eggs" instance=ExtResource( 5 )]
+position = Vector2( 501, 54 )
 
 [node name="MapLimits" type="StaticBody2D" parent="."]
 
