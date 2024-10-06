@@ -22,6 +22,9 @@ namespace Game
 #region Signals
         [Signal]
         public delegate void ToadSpawning(IEnumerable<Toad> toads);
+
+        [Signal]
+        public delegate void SpawningFinished(Egg egg);
 #endregion
 
 #region Exported Properties
@@ -117,6 +120,10 @@ namespace Game
 
                 _spawnTimer.WaitTime = _currentSet.Time;
                 _spawnTimer.Start();
+            }
+            else
+            {
+                EmitSignal(nameof(SpawningFinished), this);
             }
         }
 #endregion
