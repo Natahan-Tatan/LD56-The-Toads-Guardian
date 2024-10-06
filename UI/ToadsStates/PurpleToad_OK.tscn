@@ -7,6 +7,7 @@ atlas = ExtResource( 1 )
 region = Rect2( 16, 0, 16, 16 )
 
 [node name="PurpleToad_OK" type="TextureRect"]
+modulate = Color( 0.364706, 0.364706, 0.364706, 0.396078 )
 margin_left = 20.0
 margin_right = 36.0
 margin_bottom = 20.0

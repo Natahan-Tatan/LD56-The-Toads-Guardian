@@ -9,6 +9,8 @@ namespace Game
     public class ToadsManager : Node
     {
     #region Signals
+        [Signal]
+        public delegate void ToadsSpawnFromEgg(IEnumerable<Toad> toads);
     #endregion
 
     #region Exported Properties
@@ -25,12 +27,6 @@ namespace Game
         public override void _Ready()
         {
             _map = this.GetNode<TileMap>("%Map");
-
-            // Mostly use for tests. In normal game, no Toads are present in the map before first spawning
-            foreach(var toad in this.GetChildren().OfType<Toad>())
-            {
-                toad.Map = _map;
-            }
 
             foreach(var egg in _map.GetChildren().OfType<Egg>())
             {
@@ -50,6 +46,8 @@ namespace Game
                 toad.Map = _map;
                 this.AddChild(toad);
             }
+
+            EmitSignal(nameof(ToadsSpawnFromEgg), toads);
         }    
     #endregion
     }

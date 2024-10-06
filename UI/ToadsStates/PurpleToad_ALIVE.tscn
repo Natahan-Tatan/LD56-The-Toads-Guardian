@@ -6,7 +6,7 @@
 atlas = ExtResource( 1 )
 region = Rect2( 0, 0, 16, 16 )
 
-[node name="PurpleToad" type="TextureRect"]
+[node name="PurpleToad_ALIVE" type="TextureRect"]
 margin_right = 16.0
 margin_bottom = 20.0
 texture = SubResource( 7 )

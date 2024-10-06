@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Objects/Map/Map.tscn" type="PackedScene" id=1]
 [ext_resource path="res://UI/Theme/toads_guardian.theme" type="Theme" id=2]
@@ -7,11 +7,13 @@
 [ext_resource path="res://UI/ToadsStates/YellowToad_DEAD.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scenes/Game/ToadsManager.cs" type="Script" id=6]
 [ext_resource path="res://Objects/Map/Map.cs" type="Script" id=7]
-[ext_resource path="res://UI/ToadsStates/YellowToad.tscn" type="PackedScene" id=8]
+[ext_resource path="res://UI/ToadsStates/YellowToad_ALIVE.tscn" type="PackedScene" id=8]
 [ext_resource path="res://UI/ToadsStates/PurpleToad_OK.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Scenes/Game/TopBar/ToadsCounter.cs" type="Script" id=10]
 [ext_resource path="res://UI/ToadsStates/PurpleToad_DEAD.tscn" type="PackedScene" id=11]
-[ext_resource path="res://UI/ToadsStates/PurpleToad.tscn" type="PackedScene" id=12]
+[ext_resource path="res://UI/ToadsStates/PurpleToad_ALIVE.tscn" type="PackedScene" id=12]
+[ext_resource path="res://UI/Theme/PixeloidMono.ttf" type="DynamicFontData" id=13]
+[ext_resource path="res://Scenes/Game/Game.cs" type="Script" id=14]
 
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 329, 6.5 )
@@ -19,41 +21,49 @@ extents = Vector2( 329, 6.5 )
 [sub_resource type="RectangleShape2D" id=6]
 extents = Vector2( 6.25, 193 )
 
-[node name="Game" type="Node"]
+[sub_resource type="DynamicFont" id=7]
+size = 34
+font_data = ExtResource( 13 )
 
-[node name="Map" parent="." instance=ExtResource( 1 )]
+[node name="Game" type="Node"]
+script = ExtResource( 14 )
+
+[node name="Scene" type="CanvasLayer" parent="."]
+follow_viewport_enable = true
+
+[node name="Map" parent="Scene" instance=ExtResource( 1 )]
 unique_name_in_owner = true
 z_index = -10
 script = ExtResource( 7 )
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="Scene"]
 anchor_mode = 0
 current = true
 zoom = Vector2( 0.5, 0.5 )
 
-[node name="Player" parent="." instance=ExtResource( 3 )]
+[node name="Player" parent="Scene" instance=ExtResource( 3 )]
 position = Vector2( 504, 211 )
 z_index = 10
 Speed = 10.0
 
-[node name="ToadsManager" type="Node" parent="."]
+[node name="ToadsManager" type="Node" parent="Scene"]
 script = ExtResource( 6 )
 
-[node name="MapLimits" type="StaticBody2D" parent="."]
+[node name="MapLimits" type="StaticBody2D" parent="Scene"]
 
-[node name="Top" type="CollisionShape2D" parent="MapLimits"]
+[node name="Top" type="CollisionShape2D" parent="Scene/MapLimits"]
 position = Vector2( 319, 19.5 )
 shape = SubResource( 5 )
 
-[node name="Bottom" type="CollisionShape2D" parent="MapLimits"]
+[node name="Bottom" type="CollisionShape2D" parent="Scene/MapLimits"]
 position = Vector2( 318, 367 )
 shape = SubResource( 5 )
 
-[node name="Left" type="CollisionShape2D" parent="MapLimits"]
+[node name="Left" type="CollisionShape2D" parent="Scene/MapLimits"]
 position = Vector2( -6.25, 182 )
 shape = SubResource( 6 )
 
-[node name="Right" type="CollisionShape2D" parent="MapLimits"]
+[node name="Right" type="CollisionShape2D" parent="Scene/MapLimits"]
 position = Vector2( 644, 182 )
 shape = SubResource( 6 )
 
@@ -69,9 +79,9 @@ margin_bottom = 5.08
 theme = ExtResource( 2 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI/TopBar"]
-margin_left = 12.0
+margin_left = 16.0
 margin_top = 16.0
-margin_right = 628.0
+margin_right = 624.0
 margin_bottom = 36.0
 
 [node name="LevelLabel" type="Label" parent="UI/TopBar/HBoxContainer"]
@@ -81,20 +91,16 @@ text = "Level 1"
 
 [node name="ToadsCounter" type="HBoxContainer" parent="UI/TopBar/HBoxContainer"]
 margin_left = 81.0
-margin_right = 616.0
+margin_right = 608.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 10 )
+PurpleToad = ExtResource( 12 )
+PurpleToad_OK = ExtResource( 9 )
+PurpleToad_DEAD = ExtResource( 11 )
+YellowToad = ExtResource( 8 )
+YellowToad_OK = ExtResource( 4 )
+YellowToad_DEAD = ExtResource( 5 )
 
-[node name="PurpleToad" parent="UI/TopBar/HBoxContainer/ToadsCounter" instance=ExtResource( 12 )]
-
-[node name="PurpleToad_OK" parent="UI/TopBar/HBoxContainer/ToadsCounter" instance=ExtResource( 9 )]
-
-[node name="PurpleToad_DEAD" parent="UI/TopBar/HBoxContainer/ToadsCounter" instance=ExtResource( 11 )]
-
-[node name="YellowToad" parent="UI/TopBar/HBoxContainer/ToadsCounter" instance=ExtResource( 8 )]
-
-[node name="YellowToad_OK" parent="UI/TopBar/HBoxContainer/ToadsCounter" instance=ExtResource( 4 )]
-
-[node name="YellowToad_DEAD" parent="UI/TopBar/HBoxContainer/ToadsCounter" instance=ExtResource( 5 )]
+[connection signal="ToadsSpawnFromEgg" from="Scene/ToadsManager" to="UI/TopBar/HBoxContainer/ToadsCounter" method="_on_ToadsManager_ToadsSpawnFromEgg"]
