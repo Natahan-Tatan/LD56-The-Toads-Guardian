@@ -8,12 +8,14 @@ namespace Game
 
     public abstract class Toad : KinematicBody2D
     {
+#region Signals
         [Signal]
         public delegate void Arrived(Toad toad);
         [Signal]
         public delegate void Died(Toad toad, Node killer);
 
         public TileMap Map {get;set;}
+#endregion
 
 #region Exported Properties
         [Export]
@@ -53,19 +55,32 @@ namespace Game
         protected Timer _wanderingTimer;
         protected AnimatedSprite _bodyAnimations;
         protected AnimatedSprite _eyesAnimations;
-        //protected IList<Node2D> _currentEnnemies {get; set;} = new List<Node2D>();
+        protected CollisionShape2D _nearShape;
+        protected Area2D _sensor;
 
-        #endregion
+#endregion
 
+#region Public Methods
+        public void TriggerDead(Node killer)
+        {
+            if(_currentState != State.DIED && _currentState != State.ARRIVED)
+            {
+                GD.Print($"☠️ {killer.Name} killed {this.Name} !");
+                _currentState = State.DIED;
+
+                // We disable all collisions
+                _sensor.SetDeferred("monitoring", false);
+                _sensor.SetDeferred("monitorable", false);
+                this.GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("disabled", true);
+                this.ZIndex = -1;
+
+                EmitSignal(nameof(Died), this, killer);
+            }
+        }
         public void TriggerArrival(Pond pond)
         {
             if(_currentState != State.ARRIVED && _currentState != State.DIED)
             {
-                if(OS.IsDebugBuild())
-                {
-                    GD.Print($"{this.Name} ARRIVED to pond !");
-                }
-
                 _currentDirection = (pond.GlobalPosition - this.GlobalPosition).Normalized();
                 this.LookAt(this.GlobalPosition + _currentDirection);
                 this.RotationDegrees += 90;
@@ -82,6 +97,8 @@ namespace Game
             _wanderingTimer = this.GetNode<Timer>("WanderingTimer");
             _bodyAnimations = this.GetNode<AnimatedSprite>("Body");
             _eyesAnimations = this.GetNode<AnimatedSprite>("Eyes");
+            _nearShape = this.GetNode<CollisionShape2D>("Sensor/NearCircle");
+            _sensor = this.GetNode<Area2D>("Sensor");
 
             _isReady = true;
         }
@@ -103,11 +120,6 @@ namespace Game
                     if(_rand.Luck(1,20))
                     {                      
                         _currentDirection = _rand.NextVector2(1).Normalized();
-
-                        if(OS.IsDebugBuild())
-                        {
-                            GD.Print($"{this.Name} starts WANDERING toward {_currentDirection}!");
-                        }
 
                         this.LookAt(this.GlobalPosition + _currentDirection);
                         this.RotationDegrees += 90;
@@ -156,6 +168,7 @@ namespace Game
                 }
             }
         }
+#endregion
 
 #region Internal methods
 
@@ -180,35 +193,53 @@ namespace Game
                         _bodyAnimations.Animation = "move";
                         _eyesAnimations.Animation = "afraid";
                     break;
+
+                    case State.DIED:
+                        _bodyAnimations.Animation = "dead";
+                        _eyesAnimations.Visible = false;
+                    break;
                 }
             }
         }
 
-        protected abstract void _EntityEntered(Node entity);
+        protected abstract void _EntityEntered(Node entity, bool near);
 
 
-        protected abstract void _EntityExited(Node entity);
+        protected abstract void _EntityExited(Node entity, bool near);
 
 #endregion
+
 #region Signals Hooks
-        public void _on_Sensor_body_entered(Node body)
+        public void _on_Sensor_body_shape_entered(RID bodyRID, Node body, int bodyShapeIndex, int localShapeIndex)
         {
-            this._EntityEntered(body);
+            this._EntityEntered(
+                entity: body,
+                near: _sensor.ShapeOwnerGetOwner(_sensor.ShapeFindOwner(localShapeIndex)) == _nearShape 
+            );
         }
 
-        public void _on_Sensor_area_entered(Area2D area)
+        public void _on_Sensor_area_shape_entered(RID areaRID, Area2D area, int areaShapeIndex, int localShapeIndex)
         {
-            this._EntityEntered(area);
+            this._EntityEntered(
+                entity: area,
+                near: _sensor.ShapeOwnerGetOwner(_sensor.ShapeFindOwner(localShapeIndex)) == _nearShape 
+            );
         }
 
-        public void _on_Sensor_body_exited(Node body)
+        public void _on_Sensor_body_shape_exited(RID bodyRID, Node body, int bodyShapeIndex, int localShapeIndex)
         {
-            this._EntityExited(body);
+            this._EntityEntered(
+                entity: body,
+                near: _sensor.ShapeOwnerGetOwner(_sensor.ShapeFindOwner(localShapeIndex)) == _nearShape 
+            );
         }
 
-        public void _on_Sensor_area_exited(Area2D area)
+        public void _on_Sensor_area_shape_exited(RID areaRID, Area2D area, int areaShapeIndex, int localShapeIndex)
         {
-            this._EntityExited(area);
+            this._EntityEntered(
+                entity: area,
+                near: _sensor.ShapeOwnerGetOwner(_sensor.ShapeFindOwner(localShapeIndex)) == _nearShape 
+            );
         }
 
         public void _on_Body_animation_finished()
@@ -224,11 +255,6 @@ namespace Game
         {
             _currentDirection = Vector2.Zero;
             _currentState = State.IDLE;
-            
-            if(OS.IsDebugBuild())
-            {
-                GD.Print($"{this.Name} STOPS wandering !");
-            }
         }
 
         public void _on_ArrivedTimer_timeout()

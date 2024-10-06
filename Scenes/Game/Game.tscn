@@ -17,6 +17,7 @@ extents = Vector2( 6.25, 193 )
 
 [node name="Map" parent="." instance=ExtResource( 1 )]
 unique_name_in_owner = true
+z_index = -10
 script = ExtResource( 7 )
 
 [node name="Egg" parent="Map" instance=ExtResource( 5 )]
@@ -33,6 +34,7 @@ position = Vector2( 586, 312 )
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 504, 211 )
+z_index = 10
 Speed = 10.0
 
 [node name="ToadsManager" type="Node" parent="."]

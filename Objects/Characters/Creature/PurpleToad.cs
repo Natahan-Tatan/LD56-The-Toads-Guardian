@@ -5,7 +5,7 @@ namespace Game
 {
     public class PurpleToad : Toad
     {
-        protected override void _EntityEntered(Node entity)
+        protected override void _EntityEntered(Node entity, bool near)
         {
             if(entity is Player player && (_currentState == State.IDLE || _currentState == State.WANDERING))
             {
@@ -19,7 +19,7 @@ namespace Game
             }
         }
 
-        protected override void _EntityExited(Node entity)
+        protected override void _EntityExited(Node entity, bool near)
         {
             if(_currentState == State.FOLLOWING && _currentFollower == entity)
             {
