@@ -1,9 +1,17 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Objects/Map/Map.tscn" type="PackedScene" id=1]
+[ext_resource path="res://UI/Theme/toads_guardian.theme" type="Theme" id=2]
 [ext_resource path="res://Objects/Characters/Player/Player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://UI/ToadsStates/YellowToad_OK.tscn" type="PackedScene" id=4]
+[ext_resource path="res://UI/ToadsStates/YellowToad_DEAD.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scenes/Game/ToadsManager.cs" type="Script" id=6]
 [ext_resource path="res://Objects/Map/Map.cs" type="Script" id=7]
+[ext_resource path="res://UI/ToadsStates/YellowToad.tscn" type="PackedScene" id=8]
+[ext_resource path="res://UI/ToadsStates/PurpleToad_OK.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Scenes/Game/TopBar/ToadsCounter.cs" type="Script" id=10]
+[ext_resource path="res://UI/ToadsStates/PurpleToad_DEAD.tscn" type="PackedScene" id=11]
+[ext_resource path="res://UI/ToadsStates/PurpleToad.tscn" type="PackedScene" id=12]
 
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 329, 6.5 )
@@ -34,7 +42,7 @@ script = ExtResource( 6 )
 [node name="MapLimits" type="StaticBody2D" parent="."]
 
 [node name="Top" type="CollisionShape2D" parent="MapLimits"]
-position = Vector2( 319, -6.5 )
+position = Vector2( 319, 19.5 )
 shape = SubResource( 5 )
 
 [node name="Bottom" type="CollisionShape2D" parent="MapLimits"]
@@ -48,3 +56,45 @@ shape = SubResource( 6 )
 [node name="Right" type="CollisionShape2D" parent="MapLimits"]
 position = Vector2( 644, 182 )
 shape = SubResource( 6 )
+
+[node name="UI" type="CanvasLayer" parent="."]
+layer = 2
+follow_viewport_enable = true
+
+[node name="TopBar" type="PanelContainer" parent="UI"]
+anchor_right = 0.5
+anchor_bottom = 0.036
+margin_top = -15.0
+margin_bottom = 5.08
+theme = ExtResource( 2 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/TopBar"]
+margin_left = 12.0
+margin_top = 16.0
+margin_right = 628.0
+margin_bottom = 36.0
+
+[node name="LevelLabel" type="Label" parent="UI/TopBar/HBoxContainer"]
+margin_right = 77.0
+margin_bottom = 20.0
+text = "Level 1"
+
+[node name="ToadsCounter" type="HBoxContainer" parent="UI/TopBar/HBoxContainer"]
+margin_left = 81.0
+margin_right = 616.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 10 )
+
+[node name="PurpleToad" parent="UI/TopBar/HBoxContainer/ToadsCounter" instance=ExtResource( 12 )]
+
+[node name="PurpleToad_OK" parent="UI/TopBar/HBoxContainer/ToadsCounter" instance=ExtResource( 9 )]
+
+[node name="PurpleToad_DEAD" parent="UI/TopBar/HBoxContainer/ToadsCounter" instance=ExtResource( 11 )]
+
+[node name="YellowToad" parent="UI/TopBar/HBoxContainer/ToadsCounter" instance=ExtResource( 8 )]
+
+[node name="YellowToad_OK" parent="UI/TopBar/HBoxContainer/ToadsCounter" instance=ExtResource( 4 )]
+
+[node name="YellowToad_DEAD" parent="UI/TopBar/HBoxContainer/ToadsCounter" instance=ExtResource( 5 )]

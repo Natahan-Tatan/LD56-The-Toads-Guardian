@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://UI/ToadsStates/toads_states.png" type="Texture" id=1]
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 16, 16 )
+
+[node name="PurpleToad" type="TextureRect"]
+margin_right = 16.0
+margin_bottom = 20.0
+texture = SubResource( 7 )
+stretch_mode = 4
