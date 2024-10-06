@@ -26,9 +26,11 @@ size = 34
 font_data = ExtResource( 13 )
 
 [node name="Game" type="Node"]
+pause_mode = 2
 script = ExtResource( 14 )
 
 [node name="Scene" type="CanvasLayer" parent="."]
+pause_mode = 1
 follow_viewport_enable = true
 
 [node name="Map" parent="Scene" instance=ExtResource( 1 )]
@@ -70,6 +72,28 @@ shape = SubResource( 6 )
 [node name="UI" type="CanvasLayer" parent="."]
 layer = 2
 follow_viewport_enable = true
+
+[node name="PausePanel" type="PanelContainer" parent="UI"]
+unique_name_in_owner = true
+visible = false
+anchor_left = 0.16
+anchor_top = 0.171
+anchor_right = 0.334
+anchor_bottom = 0.331
+margin_left = 0.199982
+margin_top = -0.120003
+margin_right = -0.52002
+margin_bottom = -0.320023
+theme = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="UI/PausePanel"]
+margin_left = 16.0
+margin_top = 36.0
+margin_right = 206.0
+margin_bottom = 78.0
+custom_fonts/font = SubResource( 7 )
+text = "Pause"
+align = 1
 
 [node name="TopBar" type="PanelContainer" parent="UI"]
 anchor_right = 0.5
