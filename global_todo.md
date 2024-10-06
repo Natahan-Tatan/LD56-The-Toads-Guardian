@@ -1,2 +1,3 @@
+- [ ] TODO Level: level list in Game node
 - [ ] TODO TopBar: reset and change level num on **Game.StartLevel** signal
 - [ ] FIXME Toads sprite: remove water on immerged sprites
