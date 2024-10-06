@@ -3,7 +3,7 @@ using System;
 
 namespace Game
 {
-    public class PurpleToad : Toad
+    public class YellowToad : Toad
     {
         protected override void _EntityEntered(Node entity, bool near)
         {
@@ -15,5 +15,4 @@ namespace Game
             base._EntityExited(entity, near);
         }
     }
-
 }

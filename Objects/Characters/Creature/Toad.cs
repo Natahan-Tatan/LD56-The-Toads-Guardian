@@ -202,10 +202,23 @@ namespace Game
             }
         }
 
-        protected abstract void _EntityEntered(Node entity, bool near);
+        protected virtual void _EntityEntered(Node entity, bool near)
+        {
+            if(entity is Player player && (_currentState == State.IDLE || _currentState == State.WANDERING))
+            {
+                _currentFollower = player;
+                _currentState = State.FOLLOWING;
+            }
+        }
 
-
-        protected abstract void _EntityExited(Node entity, bool near);
+        protected virtual void _EntityExited(Node entity, bool near)
+        {
+            if(_currentState == State.FOLLOWING && _currentFollower == entity)
+            {
+                _currentFollower = null;
+                _currentState = State.IDLE;
+            }
+        }
 
 #endregion
 
