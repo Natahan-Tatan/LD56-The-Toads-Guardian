@@ -1,11 +1,11 @@
 [gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Objects/Map/Map.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Objects/Characters/Creature/PurpleToad.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Objects/Characters/Player/Player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Objects/Pond/Pond.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Objects/Egg/Egg.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scenes/Game/ToadsManager.cs" type="Script" id=6]
+[ext_resource path="res://Objects/Map/Map.cs" type="Script" id=7]
 
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 329, 6.5 )
@@ -17,6 +17,11 @@ extents = Vector2( 6.25, 193 )
 
 [node name="Map" parent="." instance=ExtResource( 1 )]
 unique_name_in_owner = true
+script = ExtResource( 7 )
+
+[node name="Egg" parent="Map" instance=ExtResource( 5 )]
+position = Vector2( 534, 39 )
+Groups = [ "0;2;5", "0;5;3" ]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
@@ -26,26 +31,12 @@ zoom = Vector2( 0.5, 0.5 )
 [node name="Pond" parent="." instance=ExtResource( 4 )]
 position = Vector2( 586, 312 )
 
-[node name="ToadsManager" type="Node2D" parent="."]
-script = ExtResource( 6 )
-
-[node name="PurpleToad" parent="ToadsManager" instance=ExtResource( 2 )]
-position = Vector2( 450, 103 )
-
-[node name="PurpleToad2" parent="ToadsManager" instance=ExtResource( 2 )]
-position = Vector2( 560, 122 )
-
 [node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 504, 211 )
 Speed = 10.0
 
-[node name="Eggs" type="Node2D" parent="."]
-
-[node name="Egg" parent="Eggs" instance=ExtResource( 5 )]
-position = Vector2( 593, 34 )
-
-[node name="Egg2" parent="Eggs" instance=ExtResource( 5 )]
-position = Vector2( 501, 54 )
+[node name="ToadsManager" type="Node" parent="."]
+script = ExtResource( 6 )
 
 [node name="MapLimits" type="StaticBody2D" parent="."]
 
