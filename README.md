@@ -1,4 +1,4 @@
-# LD56-Protectorator
+# LD56 - The Toads Guardian
 My entry for the LD56. Theme is **Tiny creature**
 
 # Screenshots
