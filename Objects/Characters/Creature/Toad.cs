@@ -15,6 +15,7 @@ namespace Game
         public delegate void Died(Toad toad, Node killer);
 
         public TileMap Map {get;set;}
+        public bool IsAlive {get => _currentState != State.DIED;}
 #endregion
 
 #region Exported Properties
