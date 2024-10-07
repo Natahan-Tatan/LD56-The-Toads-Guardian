@@ -46,15 +46,18 @@ public class MusicManager : Node
 
     public void _on_Game_StartLevel(int level)
     {
+        _levelEnd = false;
         _bass.Play();
         _melody.Play();
-        _levelEnd = false;
     }
 
     public void _on_MusicTween_Finished()
     {
-        _bass.Stop();
-        _melody.Stop();
+        if(_levelEnd)
+        {
+            _bass.Stop();
+            _melody.Stop();     
+        }
         _bass.VolumeDb = _melody.VolumeDb = 0;
     }
 }

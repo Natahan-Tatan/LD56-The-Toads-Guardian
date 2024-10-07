@@ -12,7 +12,7 @@ namespace Game
         [Export]
         public PackedScene Car {get;set;}
 
-        [Export(PropertyHint.Range,"2,30,0.5")]
+        [Export(PropertyHint.Range,"2,30,0.1")]
         public float Interval {get;set;} = 2;
 
         [Export(PropertyHint.Range,"5,20,0.1")]

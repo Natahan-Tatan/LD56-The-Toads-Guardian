@@ -88,7 +88,10 @@ namespace Game
 
             _currentState = State.STARTING;
             _spawnFinished = false;
-            _remainingToads = _countArrived = _countSpawned = _countDead = 0;
+            _remainingToads = 0;
+            _countArrived = 0;
+            _countSpawned =  0;
+            _countDead = 0;
 
             // Remove current map
             var scene = this.GetNode<Node>("Scene");
@@ -109,6 +112,22 @@ namespace Game
         public override void _UnhandledInput(InputEvent @event)
         {
             base._UnhandledInput(@event);
+
+            if(@event is InputEventKey key && key.Pressed && !key.IsEcho())
+            {
+                if(key.PhysicalScancode == (uint)KeyList.F3 && _currentLevel > 0)
+                {
+                    this.LoadLevel(_currentLevel - 1);
+                    return;
+                }
+                else if(key.PhysicalScancode == (uint)KeyList.F4 && _currentLevel < LevelsList.Count() - 1)
+                {
+                    this.NextLevel();
+                    return;
+                }
+
+                
+            }
 
             switch(_currentState)
             {
@@ -209,7 +228,7 @@ namespace Game
 
         public void _on_EndPanelAnimationPlayer_animation_finished(string animName)
         {
-            if(animName == "Unveilling")
+            if(animName == "Unveilling" && _currentState == State.STATS)
             {
                 _currentState = State.ENDING;
             }

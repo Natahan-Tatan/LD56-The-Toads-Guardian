@@ -13,11 +13,11 @@ tile_data = PoolIntArray( 65536, 10, 131072, 65537, 10, 65536, 65538, 10, 65536,
 
 [node name="CarPath" parent="Paths" index="0" instance=ExtResource( 2 )]
 curve = SubResource( 1 )
-Interval = 5.0
+Interval = 3.0
 
 [node name="Egg" parent="." index="1"]
 position = Vector2( 89, 89 )
-Groups = [ "0;2;1", "0;2;2", "0;5;15" ]
+Groups = [ "0;2;1", "0;5;1" ]
 
 [node name="Player" parent="." index="3"]
 position = Vector2( 42, 314 )
