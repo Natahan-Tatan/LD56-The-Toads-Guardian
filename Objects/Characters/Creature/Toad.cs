@@ -8,6 +8,16 @@ namespace Game
 
     public abstract class Toad : KinematicBody2D
     {
+        public enum State: int
+        {
+            IDLE = 0,
+            WANDERING,
+            FLEEING,
+            FOLLOWING,
+            ARRIVED,
+            DIED
+        }
+
 #region Signals
         [Signal]
         public delegate void Arrived(Toad toad);
@@ -20,19 +30,12 @@ namespace Game
 
 #region Exported Properties
         [Export]
-        public float FollowingSpeed {get;set;} = 5f;
+        public float FollowingSpeed {get;set;} = 8f;
+        [Export]
+        public float WanderingSpeed {get;set;} = 5f;
         [Export]
         public float FleeSpeed {get;set;} = 10f;
 #endregion
-        public enum State: int
-        {
-            IDLE = 0,
-            WANDERING,
-            FLEEING,
-            FOLLOWING,
-            ARRIVED,
-            DIED
-        }
 
 #region Internal Properties
         protected Random _rand = new Random();
@@ -143,9 +146,12 @@ namespace Game
 
                 switch(_currentState)
                 {
-                    case State.FOLLOWING:
                     case State.WANDERING:
                     case State.ARRIVED:
+                        move *= WanderingSpeed;
+                    break;
+
+                    case State.FOLLOWING:
                         move *= FollowingSpeed;
                     break;
 
