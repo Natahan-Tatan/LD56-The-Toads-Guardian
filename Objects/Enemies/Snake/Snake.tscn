@@ -78,6 +78,7 @@ autostart = true
 
 [node name="AttackSound" type="AudioStreamPlayer2D" parent="."]
 stream = SubResource( 10 )
+bus = "Sound effects"
 
 [connection signal="body_entered" from="Sensor" to="." method="_on_Sensor_body_entered"]
 [connection signal="body_exited" from="Sensor" to="." method="_on_Sensor_body_exited"]

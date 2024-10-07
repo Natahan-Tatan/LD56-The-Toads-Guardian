@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://Objects/Map/Map.cs" type="Script" id=1]
 [ext_resource path="res://Objects/Map/tileset.res" type="TileSet" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://Objects/Characters/Creature/PurpleToad.tscn" type="PackedScene" id=7]
 [ext_resource path="res://title.png" type="Texture" id=8]
 [ext_resource path="res://UI/Theme/toads_guardian.theme" type="Theme" id=9]
+[ext_resource path="res://Scenes/Game/wind.ogg" type="AudioStream" id=10]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 342.5, 9 )
@@ -156,3 +157,7 @@ bbcode_enabled = true
 bbcode_text = "[center]Ludum dare 56 game jam entry by Natahan[center]"
 text = "Ludum dare 56 game jam entry by Natahan"
 fit_content_height = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 10 )
+autoplay = true

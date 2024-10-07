@@ -55,5 +55,6 @@ shape = SubResource( 6 )
 [node name="AppearSound" type="AudioStreamPlayer2D" parent="."]
 stream = SubResource( 7 )
 volume_db = -2.947
+bus = "Sound effects"
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]

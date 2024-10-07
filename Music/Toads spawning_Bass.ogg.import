@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/Toads spawning_Bass.ogg-c189a4ed3a16c63dd80982ecb7233e56.oggstr"
+
+[deps]
+
+source_file="res://Music/Toads spawning_Bass.ogg"
+dest_files=[ "res://.import/Toads spawning_Bass.ogg-c189a4ed3a16c63dd80982ecb7233e56.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

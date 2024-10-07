@@ -20,5 +20,6 @@ shape = SubResource( 1 )
 [node name="ToadArrived" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 3 )
 pitch_scale = 1.15
+bus = "Sound effects"
 
 [connection signal="body_entered" from="." to="." method="_on_Pond_body_entered"]
