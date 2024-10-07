@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Game
 {
@@ -42,6 +43,7 @@ namespace Game
 #endregion
 
 #region Internal Properties
+        protected List<Node2D> _predators = new List<Node2D>();
         protected Random _rand = new Random();
         protected State _currentState
         {
@@ -134,9 +136,41 @@ namespace Game
 
                         _currentState = State.WANDERING;
 
-                        _wanderingTimer.WaitTime = (float)_rand.NextDouble() * 3f;
+                        _wanderingTimer.WaitTime = (float)_rand.NextDouble() * 8f + 0.5f;
                     }
                 break;
+            }
+
+            _predators = _predators.Where(p => {
+                try
+                {
+                    return p != null && !p.IsQueuedForDeletion();
+                }
+                catch(ObjectDisposedException)
+                {
+                    return false;
+                }
+            }).ToList();
+
+            if(_predators.Count > 0)
+            {
+                if(_currentState == State.WANDERING || _currentState == State.IDLE || _currentState == State.FLEEING)
+                {
+                    _currentDirection = -(_predators
+                            .Select(p => p.GlobalPosition - this.GlobalPosition)
+                            .Aggregate((sum, next) => sum += next) / _predators.Count()).Normalized();
+
+                    GD.Print($"Flee {_currentDirection}");
+                    
+                    this.LookAt(this.GlobalPosition + _currentDirection);
+                    this.RotationDegrees += 90;
+                    
+                    _currentState = State.FLEEING;
+                }
+            }
+            else if(_currentState == State.FLEEING)
+            {
+                _currentState = State.IDLE;
             }
         }
 
@@ -191,13 +225,13 @@ namespace Game
                 {
                     case State.IDLE:
                         _bodyAnimations.Animation = "idle";
-                        _eyesAnimations.Animation = "opening";
+                        _eyesAnimations.Animation = "default";
                     break;
 
                     case State.FOLLOWING:
                     case State.WANDERING:
                         _bodyAnimations.Animation = "move";
-                        _eyesAnimations.Animation = "opening";
+                        _eyesAnimations.Animation = "default";
                     break;
 
                     case State.FLEEING:
@@ -220,6 +254,22 @@ namespace Game
                 _currentFollower = player;
                 _currentState = State.FOLLOWING;
             }
+
+            if(entity is Area2D area)
+            {
+                if(area.GetParent() is Car)
+                {
+                    if(near)
+                    {
+                        _predators.Add(area);
+                    }
+                }
+            }
+            else if(entity is Snake snake)
+            {
+                _predators.Add(snake);
+            }
+
         }
 
         protected virtual void _EntityExited(Node entity, bool near)
@@ -228,6 +278,11 @@ namespace Game
             {
                 _currentFollower = null;
                 _currentState = State.IDLE;
+            }
+
+            if(entity is Node2D node)
+            {
+                _predators.Remove(node);
             }
         }
 
@@ -252,7 +307,7 @@ namespace Game
 
         public void _on_Sensor_body_shape_exited(RID bodyRID, Node body, int bodyShapeIndex, int localShapeIndex)
         {
-            this._EntityEntered(
+            this._EntityExited(
                 entity: body,
                 near: _sensor.ShapeOwnerGetOwner(_sensor.ShapeFindOwner(localShapeIndex)) == _nearShape 
             );
@@ -260,7 +315,7 @@ namespace Game
 
         public void _on_Sensor_area_shape_exited(RID areaRID, Area2D area, int areaShapeIndex, int localShapeIndex)
         {
-            this._EntityEntered(
+            this._EntityExited(
                 entity: area,
                 near: _sensor.ShapeOwnerGetOwner(_sensor.ShapeFindOwner(localShapeIndex)) == _nearShape 
             );

@@ -211,6 +211,7 @@ region = Rect2( 256, 0, 64, 64 )
 [node name="Game" type="Node"]
 pause_mode = 2
 script = ExtResource( 14 )
+TestLevel = 1
 LevelsList = [ ExtResource( 18 ), ExtResource( 7 ) ]
 
 [node name="Scene" type="CanvasLayer" parent="."]

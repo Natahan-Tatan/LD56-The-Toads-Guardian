@@ -63,7 +63,7 @@ animations = [ {
 radius = 7.0
 
 [sub_resource type="CircleShape2D" id=23]
-radius = 99.0
+radius = 113.004
 
 [sub_resource type="CircleShape2D" id=28]
 radius = 35.9026
@@ -82,10 +82,10 @@ animation = "opening"
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource( 22 )
 
 [node name="Sensor" type="Area2D" parent="."]
-visible = false
 modulate = Color( 0.905882, 0.45098, 1, 0.329412 )
 
 [node name="FarCircle" type="CollisionShape2D" parent="Sensor"]
