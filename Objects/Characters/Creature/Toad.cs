@@ -76,6 +76,7 @@ namespace Game
             if(_currentState != State.DIED && _currentState != State.ARRIVED)
             {
                 GD.Print($"☠️ {killer.Name} killed {this.Name} !");
+                this.GetNode<AudioStreamPlayer2D>("DieSound").Play();
                 _currentState = State.DIED;
 
                 // We disable all collisions
@@ -159,8 +160,6 @@ namespace Game
                     _currentDirection = -(_predators
                             .Select(p => p.GlobalPosition - this.GlobalPosition)
                             .Aggregate((sum, next) => sum += next) / _predators.Count()).Normalized();
-
-                    GD.Print($"Flee {_currentDirection}");
                     
                     this.LookAt(this.GlobalPosition + _currentDirection);
                     this.RotationDegrees += 90;
@@ -251,6 +250,7 @@ namespace Game
         {
             if(entity is Player player && (_currentState == State.IDLE || _currentState == State.WANDERING))
             {
+                _wanderingTimer.Stop();
                 _currentFollower = player;
                 _currentState = State.FOLLOWING;
             }
@@ -274,7 +274,7 @@ namespace Game
 
         protected virtual void _EntityExited(Node entity, bool near)
         {
-            if(_currentState == State.FOLLOWING && _currentFollower == entity)
+            if(_currentState == State.FOLLOWING && !near && _currentFollower == entity)
             {
                 _currentFollower = null;
                 _currentState = State.IDLE;

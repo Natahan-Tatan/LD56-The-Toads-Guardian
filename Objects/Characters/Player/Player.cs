@@ -26,7 +26,26 @@ namespace Game
             // If player is not dead
             if(_currentState < State.DIED) 
             {
-                _currentDirection = Input.GetVector("Left", "Right", "Up", "Down", 0.01f);
+                //_currentDirection = Input.GetVector("Left", "Right", "Up", "Down");
+
+                _currentDirection = Vector2.Zero;
+                if(Input.IsActionPressed("Up"))
+                {
+                    _currentDirection += Vector2.Up;
+                }
+                if(Input.IsActionPressed("Down"))
+                {
+                    _currentDirection += Vector2.Down;
+                }
+                if(Input.IsActionPressed("Left"))
+                {
+                    _currentDirection += Vector2.Left;
+                }
+                if(Input.IsActionPressed("Right"))
+                {
+                    _currentDirection += Vector2.Right;
+                }
+
                 
                 if(_currentDirection.Length() > 0f)
                 {

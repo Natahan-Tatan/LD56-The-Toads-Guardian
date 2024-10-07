@@ -17,12 +17,19 @@ namespace Game
 #endregion
 
 #region Internal Properties
+        private bool _sndPlayed = false;
 #endregion
 
 #region Public Methods
         public override void _PhysicsProcess(float delta)
         {
             base._PhysicsProcess(delta);
+
+            if(!_sndPlayed && GlobalPosition.y > 24 && GlobalPosition.y < 360 && GlobalPosition.x > 0 && GlobalPosition.x < 640)
+            {
+                this.GetNode<AudioStreamPlayer2D>("AppearSound").Play();
+                _sndPlayed = true;
+            }
 
             this.Offset += Speed * delta * 10;
 

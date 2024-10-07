@@ -82,6 +82,7 @@ namespace Game
         {
             if(level >= LevelsList.Count())
             {
+                this.GetNode<Control>("UI/ThanksPanel").Visible = true;
                 return;
             }
 
@@ -127,6 +128,7 @@ namespace Game
                 case State.PAUSE:
                     if(@event.IsActionPressed("Pause"))
                     {
+                        GD.Print("Action Pause");
                         this.GetTree().Paused = !this.GetTree().Paused;
                         _pausePanel.Visible = this.GetTree().Paused;
 
@@ -134,6 +136,7 @@ namespace Game
                     }
                     else if(@event.IsActionPressed("Restart"))
                     {
+                        GD.Print("Action reload");
                         this.RestartLevel();
                     }
                 break;

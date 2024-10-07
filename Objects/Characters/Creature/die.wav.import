@@ -1,0 +1,23 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/die.wav-94f7662c095b56fde4d826a9af81c4ab.sample"
+
+[deps]
+
+source_file="res://Objects/Characters/Creature/die.wav"
+dest_files=[ "res://.import/die.wav-94f7662c095b56fde4d826a9af81c4ab.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

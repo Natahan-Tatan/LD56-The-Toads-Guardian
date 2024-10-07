@@ -30,6 +30,7 @@ namespace Game
         private Toad _prey;
         private Vector2 _currentDirection;
         private Random _rand = new Random();
+        private AudioStreamPlayer2D _attackSound;
 #endregion
 
 #region Public Methods
@@ -39,6 +40,7 @@ namespace Game
 
             _wanderingTimer = GetNode<Timer>("WanderingTimer");
             _animations = GetNode<AnimatedSprite>("AnimatedSprite");
+            _attackSound = GetNode<AudioStreamPlayer2D>("AttackSound");
         }
 
         public override void _Process(float delta)
@@ -141,6 +143,7 @@ namespace Game
                     _wanderingTimer.Stop();
                     _prey = toad;
                     _currentState = State.CHASING;
+                    _attackSound.Play();
                 }
             }
         }
