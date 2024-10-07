@@ -42,6 +42,7 @@ namespace Game
         public void _on_Game_StartLevel(int level)
         {
             this.RemoveAllChildren();
+            _eggsRemaining = 0;
 
             _map = this.GetNode<TileMap>("../Map");
 
