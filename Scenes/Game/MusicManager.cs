@@ -8,6 +8,7 @@ public class MusicManager : Node
     private ToadsManager _toadsManager;
     private AudioStreamPlayer _bass;
     private AudioStreamPlayer _melody;
+    private bool _levelEnd = false;
     public override void _Ready()
     {
         _bass = this.GetNode<AudioStreamPlayer>("Bass");
@@ -19,25 +20,41 @@ public class MusicManager : Node
     {
         base._Process(delta);
 
-        if(_toadsManager.GetChildren().OfType<Toad>().Any(t => t.CurrentState == Toad.State.FOLLOWING || t.CurrentState == Toad.State.ARRIVED))
+        if(!_levelEnd)
         {
-            _bass.VolumeDb = 0;
-        }
-        else
-        {
-            _bass.VolumeDb = -80;
+            if(_toadsManager.GetChildren().OfType<Toad>().Any(t => t.CurrentState == Toad.State.FOLLOWING || t.CurrentState == Toad.State.ARRIVED))
+            {
+                _bass.VolumeDb = 0;
+            }
+            else
+            {
+                _bass.VolumeDb = -80;
+            }
         }
     }
     
-    public void _on_Game_LevelFinished()
+    public void _on_Game_LevelFinished(int countSpawned, int countArrived, int CountDead)
     {
-        _bass.Stop();
-        _melody.Stop();
+        _levelEnd = true;
+        var tween = this.GetTree().CreateTween();
+        _bass.VolumeDb = 0;
+        tween.TweenProperty(_bass, "volume_db", -80, 1f);
+        tween.TweenProperty(_melody, "volume_db", -80, 1f);
+
+        tween.Connect("finished", this, nameof(_on_MusicTween_Finished));
     }
 
     public void _on_Game_StartLevel(int level)
     {
         _bass.Play();
         _melody.Play();
+        _levelEnd = false;
+    }
+
+    public void _on_MusicTween_Finished()
+    {
+        _bass.Stop();
+        _melody.Stop();
+        _bass.VolumeDb = _melody.VolumeDb = 0;
     }
 }

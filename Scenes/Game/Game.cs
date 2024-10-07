@@ -198,7 +198,6 @@ namespace Game
             if(_remainingToads <= 0 && _spawnFinished)
             {
                 _currentState = State.STATS;
-                GetTree().Paused = true;
                 EmitSignal(nameof(LevelFinished), _countSpawned, _countArrived, _countDead);
             }
         }
