@@ -37,6 +37,10 @@ namespace Game
         public float FleeSpeed {get;set;} = 10f;
 #endregion
 
+#region Public Properties
+        public State CurrentState {get => _currentStateRaw;}
+#endregion
+
 #region Internal Properties
         protected Random _rand = new Random();
         protected State _currentState
