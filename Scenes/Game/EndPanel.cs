@@ -68,6 +68,10 @@ namespace Game
 #endregion
 
 #region Public Methods
+        public void SpeedUpStats()
+        {
+            _animPlayer.PlaybackSpeed = 3f;
+        }
         public override void _Ready()
         {
             _labelSpawned = this.GetNode<Label>("VBoxContainer/HBoxContainer/VBoxContainer/CountSpawned/Number");
@@ -171,6 +175,7 @@ namespace Game
             if(_animPlayer != null)
             {
                 _animPlayer.Play("RESET");
+                _animPlayer.PlaybackSpeed = 0.75f;
             }
 
             this.CountSpawned = 0;

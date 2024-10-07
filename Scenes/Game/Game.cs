@@ -87,7 +87,7 @@ namespace Game
 
             _currentState = State.STARTING;
             _spawnFinished = false;
-            _remainingToads = _countArrived = _countSpawned = _countDead;
+            _remainingToads = _countArrived = _countSpawned = _countDead = 0;
 
             // Remove current map
             var scene = this.GetNode<Node>("Scene");
@@ -151,6 +151,16 @@ namespace Game
                             {
                                 this.RestartLevel();
                             }
+                        }
+                    }
+                break;
+                
+                case State.STATS:
+                    if(@event is InputEventJoypadButton || @event is InputEventKey)
+                    {
+                        if(@event.IsPressed())
+                        {
+                            _endLevelPanel.SpeedUpStats();
                         }
                     }
                 break;
