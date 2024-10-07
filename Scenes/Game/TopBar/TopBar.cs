@@ -1,12 +1,13 @@
 using Godot;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace Game
 {
-    public class Map : TileMap
+    public class TopBar : PanelContainer
     {
+#region Signals
+#endregion
+
 #region Exported Properties
 #endregion
 
@@ -23,7 +24,11 @@ namespace Game
 #endregion
 
 #region Signals Hooks
+        public void _on_Game_StartLevel(int level)
+        {
+            this.GetNode<Label>("HBoxContainer/LevelLabel").Text = $"Level {level}";
+        }
 #endregion
-}
+    }
 
 }

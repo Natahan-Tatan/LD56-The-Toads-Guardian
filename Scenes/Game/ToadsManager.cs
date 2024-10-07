@@ -6,7 +6,6 @@ using System.Linq;
 
 namespace Game
 {
-    //TODO Reset on Game.StartLevel
     public class ToadsManager : Node
     {
 #region Signals
@@ -32,6 +31,18 @@ namespace Game
 #region Public Methods
         public override void _Ready()
         {
+            // Init is made in _on_Game_StartLevel, triggered when level is
+        }
+#endregion
+
+#region Internal Methods
+    #endregion
+
+#region Signals Hooks
+        public void _on_Game_StartLevel(int level)
+        {
+            this.RemoveAllChildren();
+
             _map = this.GetNode<TileMap>("../Map");
 
             foreach(var egg in _map.GetChildren().OfType<Egg>())
@@ -42,12 +53,6 @@ namespace Game
                 _eggsRemaining++;
             }
         }
-#endregion
-
-#region Internal Methods
-    #endregion
-
-#region Signals Hooks
         public void _on_Egg_ToadSpawning(IEnumerable<Toad> toads)
         {
             foreach(var toad in toads)

@@ -58,6 +58,10 @@ namespace Game
 #endregion
 
 #region Signals Hooks
+        public void _on_Game_StartLevel(int level)
+        {
+            this.RemoveAllChildren();
+        }
         public void _on_ToadsManager_ToadsSpawnFromEgg(IEnumerable<Toad> toads)
         {
             foreach(var toad in toads)

@@ -80,7 +80,7 @@ namespace Game
             _resultPASS = this.GetNode<Label>("VBoxContainer/ResultContainer/PASS");
             _resultFAIL = this.GetNode<Label>("VBoxContainer/ResultContainer/FAIL");
 
-            _animPlayer = this.GetNode<AnimationPlayer>("AnimationPlayer");
+            _animPlayer = this.GetNode<AnimationPlayer>("EndPanelAnimationPlayer");
         }
 
         public void DisplayResult()
@@ -161,6 +161,21 @@ namespace Game
             this.CountDied = CountDead;
 
             this.DisplayResult();
+        }
+
+        // Reset when level starts
+        public void _on_Game_StartLevel(int level)
+        {
+            this.Visible = false;
+
+            if(_animPlayer != null)
+            {
+                _animPlayer.Play("RESET");
+            }
+
+            this.CountSpawned = 0;
+            this.CountArrived = 0;
+            this.CountDied = 0;
         }
 
 #endregion
