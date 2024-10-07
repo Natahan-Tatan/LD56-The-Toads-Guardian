@@ -1,9 +1,10 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Objects/Map/tileset.png" type="Texture" id=1]
 [ext_resource path="res://Objects/Map/Map.cs" type="Script" id=2]
 [ext_resource path="res://Objects/Pond/Pond.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Objects/Egg/Egg.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Objects/Characters/Player/Player.tscn" type="PackedScene" id=5]
 
 [sub_resource type="NavigationPolygon" id=3]
 vertices = PoolVector2Array( 24, 24, 0, 24, 0, 0, 24, 0 )
@@ -200,3 +201,8 @@ Groups = [ "0;1;5", "0;3;5", "0;2;2" ]
 
 [node name="Pond" parent="." instance=ExtResource( 3 )]
 position = Vector2( 594, 306 )
+
+[node name="Player" parent="." instance=ExtResource( 5 )]
+position = Vector2( 504, 211 )
+z_index = 10
+Speed = 10.0

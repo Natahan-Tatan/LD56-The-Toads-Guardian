@@ -37,6 +37,7 @@ namespace Game
 #region Internal Properties
         private Control _pausePanel;
         private Control _startLevelPanel;
+        private EndPanel _endLevelPanel;
         private int _remainingToads = 0;
         private int _countArrived = 0;
         private int _countSpawned = 0;
@@ -54,6 +55,7 @@ namespace Game
 
             _pausePanel = GetNode<Control>("%PausePanel");
             _startLevelPanel = GetNode<Control>("%StartLevelPanel");
+            _endLevelPanel = GetNode<EndPanel>("%EndPanel");
 
             if(OS.HasFeature("editor"))
             {
@@ -112,7 +114,7 @@ namespace Game
                 case State.STARTING:
                     if(@event is InputEventJoypadButton || @event is InputEventKey)
                     {
-                        if(@event.IsReleased())
+                        if(@event.IsPressed())
                         {
                             _startLevelPanel.Visible = false;
                             this.GetTree().Paused = false;
@@ -130,14 +132,25 @@ namespace Game
 
                         _currentState = this.GetTree().Paused ? State.PAUSE : State.INGAME;  
                     }
+                    else if(@event.IsActionPressed("Restart"))
+                    {
+                        this.RestartLevel();
+                    }
                 break;
 
                 case State.ENDING:
                     if(@event is InputEventJoypadButton || @event is InputEventKey)
                     {
-                        if(@event.IsReleased())
+                        if(@event.IsPressed())
                         {
-                            this.NextLevel();
+                            if(_endLevelPanel.Pass)
+                            {
+                                this.NextLevel();
+                            }
+                            else
+                            {
+                                this.RestartLevel();
+                            }
                         }
                     }
                 break;
