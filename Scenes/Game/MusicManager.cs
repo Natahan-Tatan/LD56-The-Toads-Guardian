@@ -7,9 +7,11 @@ public class MusicManager : Node
 {
     private ToadsManager _toadsManager;
     private AudioStreamPlayer _bass;
+    private AudioStreamPlayer _melody;
     public override void _Ready()
     {
         _bass = this.GetNode<AudioStreamPlayer>("Bass");
+        _melody = this.GetNode<AudioStreamPlayer>("Melody");
         _toadsManager = this.GetNode<ToadsManager>("../Scene/ToadsManager");
     }
 
@@ -26,5 +28,16 @@ public class MusicManager : Node
             _bass.VolumeDb = -80;
         }
     }
+    
+    public void _on_Game_LevelFinished()
+    {
+        _bass.Stop();
+        _melody.Stop();
+    }
 
+    public void _on_Game_StartLevel(int level)
+    {
+        _bass.Play();
+        _melody.Play();
+    }
 }

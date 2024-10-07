@@ -592,13 +592,11 @@ script = ExtResource( 23 )
 [node name="Melody" type="AudioStreamPlayer" parent="MusicManager"]
 stream = ExtResource( 21 )
 pitch_scale = 1.1
-autoplay = true
 
 [node name="Bass" type="AudioStreamPlayer" parent="MusicManager"]
 stream = ExtResource( 20 )
 volume_db = -80.0
 pitch_scale = 1.1
-autoplay = true
 
 [node name="Wind" type="AudioStreamPlayer" parent="MusicManager"]
 pause_mode = 2
@@ -606,10 +604,12 @@ stream = ExtResource( 22 )
 autoplay = true
 
 [connection signal="LevelFinished" from="." to="UI/EndPanel" method="_on_Game_LevelFinished"]
+[connection signal="LevelFinished" from="." to="MusicManager" method="_on_Game_LevelFinished"]
 [connection signal="StartLevel" from="." to="Scene/ToadsManager" method="_on_Game_StartLevel"]
 [connection signal="StartLevel" from="." to="UI/TopBar" method="_on_Game_StartLevel"]
 [connection signal="StartLevel" from="." to="UI/TopBar/HBoxContainer/ToadsCounter" method="_on_Game_StartLevel"]
 [connection signal="StartLevel" from="." to="UI/EndPanel" method="_on_Game_StartLevel"]
+[connection signal="StartLevel" from="." to="MusicManager" method="_on_Game_StartLevel"]
 [connection signal="AllEggsFinishedSpawning" from="Scene/ToadsManager" to="." method="_on_ToadsManager_AllEggsFinishedSpawning"]
 [connection signal="ToadExitGame" from="Scene/ToadsManager" to="." method="_on_ToadsManager_ToadExitGame"]
 [connection signal="ToadsSpawnFromEgg" from="Scene/ToadsManager" to="." method="_on_ToadsManager_ToadsSpawnFromEgg"]
