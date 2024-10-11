@@ -2,33 +2,33 @@
 
 [ext_resource path="res://Objects/Map/Map.tscn" type="PackedScene" id=1]
 [ext_resource path="res://UI/Theme/toads_guardian.theme" type="Theme" id=2]
-[ext_resource path="res://Scenes/Levels/Level_H.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/Levels/line.tscn" type="PackedScene" id=3]
 [ext_resource path="res://UI/ToadsStates/YellowToad_OK.tscn" type="PackedScene" id=4]
 [ext_resource path="res://UI/ToadsStates/YellowToad_DEAD.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Scenes/Game/ToadsManager.cs" type="Script" id=6]
-[ext_resource path="res://Scenes/Levels/Level_1.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Scenes/Levels/Level_H.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Scenes/Game/Game.cs" type="Script" id=7]
 [ext_resource path="res://UI/ToadsStates/YellowToad_ALIVE.tscn" type="PackedScene" id=8]
 [ext_resource path="res://UI/ToadsStates/PurpleToad_OK.tscn" type="PackedScene" id=9]
-[ext_resource path="res://Scenes/Game/TopBar/ToadsCounter.cs" type="Script" id=10]
+[ext_resource path="res://Scenes/Levels/Tutorial.tscn" type="PackedScene" id=10]
 [ext_resource path="res://UI/ToadsStates/PurpleToad_DEAD.tscn" type="PackedScene" id=11]
 [ext_resource path="res://UI/ToadsStates/PurpleToad_ALIVE.tscn" type="PackedScene" id=12]
 [ext_resource path="res://UI/Theme/PixeloidMono.ttf" type="DynamicFontData" id=13]
-[ext_resource path="res://Scenes/Game/Game.cs" type="Script" id=14]
+[ext_resource path="res://Scenes/Levels/Level_4eggs_snakes.tscn" type="PackedScene" id=14]
 [ext_resource path="res://UI/Rank/Rank.cs" type="Script" id=15]
 [ext_resource path="res://UI/Rank/ranks.png" type="Texture" id=16]
 [ext_resource path="res://Scenes/Game/EndPanel.cs" type="Script" id=17]
-[ext_resource path="res://Scenes/Levels/Tutorial.tscn" type="PackedScene" id=18]
-[ext_resource path="res://Scenes/Game/TopBar/TopBar.cs" type="Script" id=19]
+[ext_resource path="res://Scenes/Levels/traffic_circle.tscn" type="PackedScene" id=18]
+[ext_resource path="res://Scenes/Levels/Cross_road_1.tscn" type="PackedScene" id=19]
 [ext_resource path="res://Music/Toads spawning_Bass.ogg" type="AudioStream" id=20]
 [ext_resource path="res://Music/Toads spawning_Melody.ogg" type="AudioStream" id=21]
-[ext_resource path="res://Scenes/Game/wind.ogg" type="AudioStream" id=22]
-[ext_resource path="res://Scenes/Game/MusicManager.cs" type="Script" id=23]
-[ext_resource path="res://Scenes/Levels/Cross_road_1.tscn" type="PackedScene" id=24]
-[ext_resource path="res://Scenes/Levels/Level_4eggs_snakes.tscn" type="PackedScene" id=25]
-[ext_resource path="res://Scenes/Levels/Cross_road_2.tscn" type="PackedScene" id=26]
-[ext_resource path="res://Scenes/Levels/traffic_circle.tscn" type="PackedScene" id=27]
-[ext_resource path="res://Scenes/Levels/line.tscn" type="PackedScene" id=28]
-[ext_resource path="res://Scenes/Levels/classic_snakes.tscn" type="PackedScene" id=29]
+[ext_resource path="res://Scenes/Levels/classic_snakes.tscn" type="PackedScene" id=22]
+[ext_resource path="res://Scenes/Game/TopBar/TopBar.cs" type="Script" id=23]
+[ext_resource path="res://Scenes/Levels/Level_1.tscn" type="PackedScene" id=24]
+[ext_resource path="res://Scenes/Game/ToadsManager.cs" type="Script" id=25]
+[ext_resource path="res://Scenes/Game/wind.ogg" type="AudioStream" id=26]
+[ext_resource path="res://Scenes/Levels/Cross_road_2.tscn" type="PackedScene" id=27]
+[ext_resource path="res://Scenes/Game/MusicManager.cs" type="Script" id=28]
+[ext_resource path="res://Scenes/Game/TopBar/ToadsCounter.cs" type="Script" id=29]
 
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 329, 6.5 )
@@ -225,8 +225,8 @@ font_data = ExtResource( 13 )
 
 [node name="Game" type="Node"]
 pause_mode = 2
-script = ExtResource( 14 )
-LevelsList = [ ExtResource( 18 ), ExtResource( 7 ), ExtResource( 3 ), ExtResource( 24 ), ExtResource( 25 ), ExtResource( 26 ), ExtResource( 27 ), ExtResource( 29 ), ExtResource( 28 ) ]
+script = ExtResource( 7 )
+LevelsList = [ ExtResource( 10 ), ExtResource( 24 ), ExtResource( 6 ), ExtResource( 19 ), ExtResource( 14 ), ExtResource( 27 ), ExtResource( 18 ), ExtResource( 22 ), ExtResource( 3 ) ]
 
 [node name="Scene" type="CanvasLayer" parent="."]
 pause_mode = 1
@@ -244,7 +244,7 @@ current = true
 zoom = Vector2( 0.5, 0.5 )
 
 [node name="ToadsManager" type="Node" parent="Scene"]
-script = ExtResource( 6 )
+script = ExtResource( 25 )
 
 [node name="MapLimits" type="StaticBody2D" parent="Scene"]
 
@@ -332,7 +332,7 @@ anchor_bottom = 0.036
 margin_top = -15.0
 margin_bottom = 5.08
 theme = ExtResource( 2 )
-script = ExtResource( 19 )
+script = ExtResource( 23 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI/TopBar"]
 margin_left = 16.0
@@ -351,7 +351,7 @@ margin_right = 608.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource( 10 )
+script = ExtResource( 29 )
 PurpleToad = ExtResource( 12 )
 PurpleToad_OK = ExtResource( 9 )
 PurpleToad_DEAD = ExtResource( 11 )
@@ -592,7 +592,7 @@ autowrap = true
 
 [node name="MusicManager" type="Node" parent="."]
 pause_mode = 1
-script = ExtResource( 23 )
+script = ExtResource( 28 )
 
 [node name="Melody" type="AudioStreamPlayer" parent="MusicManager"]
 stream = ExtResource( 21 )
@@ -605,7 +605,7 @@ pitch_scale = 1.1
 
 [node name="Wind" type="AudioStreamPlayer" parent="MusicManager"]
 pause_mode = 2
-stream = ExtResource( 22 )
+stream = ExtResource( 26 )
 autoplay = true
 
 [connection signal="LevelFinished" from="." to="UI/EndPanel" method="_on_Game_LevelFinished"]
